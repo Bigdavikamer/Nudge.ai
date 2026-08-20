@@ -1,6 +1,6 @@
 # Phase 0 — Plan
 
-Chaser: the collections layer on top of the invoicing tool you already use.
+Nudge: the collections layer on top of the invoicing tool you already use.
 
 Scope confirmed as written in the brief. Nothing in §7 is being smuggled in. This document
 is data model, adapter interfaces, wireframes, the design plan, and a critique of that plan
@@ -36,12 +36,16 @@ completes and then sits blocked behind a Google review that has not been started
 The `MailTransport` / `MailInbox` split below makes Gmail a drop-in later. This is the one
 flag I would push back on twice if overruled.
 
+> **Resolved — SMTP + IMAP first (D-015).** Phase 3 builds against SMTP. The Google
+> verification application is a Phase 1 task so Gmail can land in Phase 5–6 as an upgrade
+> behind the same two interfaces.
+
 ### 1.2 The first thing the product does could be a Final Notice blast
 
 Phase 5 ingests Stripe history. A Stripe account has invoices that are 90, 200, 400 days
 overdue — written off, disputed, from clients who left, from a bookkeeping era the user has
 mentally closed. If those land in an `active` sequence, the ladder places them at step 5 or 6
-immediately, and the user's introduction to Chaser is a wave of cold, formal collections mail
+immediately, and the user's introduction to Nudge is a wave of cold, formal collections mail
 sent from their own address to people they may have long since settled with offline.
 
 This is not a bug we can fix after launch. It is a one-shot reputational event per customer.
@@ -130,6 +134,10 @@ is also a better demo than the loop itself.
   for the first invoice with a new client, default-on afterwards** — it is a courtesy to
   someone you already have a payment relationship with, and spam to someone you do not.
   Easy to change; flagging the reasoning.
+  > **Resolved — on for everyone, including a client's first invoice (D-016).** Building it
+  > that way. It stays per-client editable, sits inside the 48-hour cap and the consolidation
+  > rule, and `heads_up` open and reply rates are instrumented from Phase 3 so the default
+  > gets revisited against data.
 - **Lighthouse ≥ 90 with Clerk + PostHog + Sentry** is achievable but not free. Third-party
   scripts load post-hydration behind `next/script` `afterInteractive`, PostHog via reverse
   proxy, Sentry with a trimmed bundle. Budgeted in Phase 6, tracked from Phase 1.
@@ -139,7 +147,7 @@ is also a better demo than the loop itself.
 Not flagged because I agree: sending from the user's mailbox is the right call, and it has a
 second benefit the brief does not mention — a creditor collecting its own debt in its own name
 sits well clear of third-party debt-collector rules in most jurisdictions, which sending from
-`@chaser.app` would start to blur. (Not legal advice; worth a real opinion before launch.)
+`@nudge.ai` would start to blur. (Not legal advice; worth a real opinion before launch.)
 
 ---
 
@@ -403,7 +411,7 @@ same instant is a real race and the pure guard cannot see it.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────┐
-│ CHASER    Dashboard   Queue (7)   Invoices   Clients                [+ Invoice]  (DB) │
+│ NUDGE     Dashboard   Queue (7)   Invoices   Clients                [+ Invoice]  (DB) │
 ├──────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                       │
 │  RECOVERED THIS MONTH          CASH AT RISK      AVG DAYS TO PAY     OLDEST OPEN      │
@@ -641,11 +649,20 @@ Plus: tokens wired, hex-literal lint rule live, `Clock` injected, seed script in
 
 ---
 
-## 10. Open questions
+## 10. Questions
 
-1. **Name and home.** Product is "Chaser (working name)"; the repo lives at
-   `FollowFlow.app/chaser/` next to an unrelated lead-follow-up app; `Nudge.ai/` is an empty
-   sibling. Which name, and which directory?
-2. **SMTP-first or Gmail-first** (1.1) — this changes Phase 3's shape.
-3. **Heads-up step default** (1.8) — on for everyone, or on from the second invoice per client?
-4. Do you agree the chase-ladder step numbers survive the `01/02/03` ban (7.5)?
+**Answered.**
+
+1. **Name and home** — product is **Nudge**, repo is `C:\Users\Pichau\Documents\Nudge.ai`.
+   Wordmark is "Nudge", domain is nudge.ai (D-001).
+2. **Mail path** — SMTP + IMAP first, Google verification started in Phase 1 (D-015).
+3. **Heads-up default** — on for everyone, first invoice included (D-016).
+
+**Still open, not blocking Phase 1.**
+
+4. Do the chase-ladder step numbers survive the `01 / 02 / 03` ban (7.5)? I am reading that
+   ban as aimed at decorative numbering, and the ladder is a genuine sequence users talk
+   about out loud ("she's on nudge two"). Numbering them unless you say otherwise.
+5. The KPI row is four figures on bare paper separated by rules, not cards (7.6). It is the
+   single riskiest call in the design and I will not know whether it reads as disciplined or
+   as unfinished until it is on screen. First thing I want your eyes on in Phase 1.

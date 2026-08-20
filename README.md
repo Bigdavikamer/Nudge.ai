@@ -1,8 +1,8 @@
-# Chaser
+# Nudge
 
 The collections layer that sits on top of the invoicing tool you already use.
 
-Connect the tool you already invoice with. Chaser writes and sends the follow-ups you keep
+Connect the tool you already invoice with. Nudge writes and sends the follow-ups you keep
 putting off, in your voice, and shuts up the moment the money lands.
 
 ## Status
