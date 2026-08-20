@@ -1,0 +1,186 @@
+/* ============================================================================
+   Chaser — design tokens
+   The only file in the repo permitted to contain a hex literal.
+   Lint rule (Phase 1): no /#[0-9a-f]{3,8}/i outside this file.
+   ========================================================================== */
+
+:root {
+  /* --- Raw palette (§3, verbatim) ------------------------------------------ */
+  --ink-900:     #0D1A20;  /* text, headers                                    */
+  --slate-600:   #47606B;  /* secondary text, borders                          */
+  --paper:       #EDF0EF;  /* app background — cool, not cream                 */
+  --pine-700:    #0B5A50;  /* primary actions, brand                           */
+  --mint-300:    #6FD3B8;  /* paid / positive states                           */
+  --amber-500:   #D9A100;  /* 1–14 days late                                   */
+  --rust-600:    #A32E2E;  /* 15–34 days late                                  */
+  --oxblood-800: #5E1B22;  /* 35+ days, final notice territory                 */
+
+  /* --- Derived: text-weight aging colours (D-011) --------------------------
+     --mint-300 measures 1.57:1 and --amber-500 2.02:1 against --paper.
+     Both fail WCAG AA for text. These carry identical meaning at legible
+     weight. Fills keep the raw hues; type uses these.                        */
+  --mint-800:    #0F6857;  /* "paid" as text            — 5.83:1 on paper      */
+  --amber-800:   #8A6100;  /* "1–14 late" as text       — 4.83:1 on paper      */
+  /* rust-600 at 6.13:1 and oxblood-800 at 11.06:1 already pass. No variant.  */
+
+  /* --- Derived: surfaces ---------------------------------------------------
+     Paper is the ground. Surfaces step *up* toward white, never toward grey,
+     so the stack reads as sheets of paper rather than as UI panels.          */
+  --surface-raised: #F6F8F7;
+  --surface-sunken: #E3E8E6;
+  --hairline:       #D2DAD8;  /* 1px rules — decorative only, never the sole
+                                 carrier of a boundary that matters           */
+  --rule-strong:    #B4C0BD;  /* table dividers, rail baseline                */
+
+  /* --- Semantic: aging bands ----------------------------------------------
+     Single source of truth for the aging scale. Every band gets a fill, a
+     text colour, and an on-fill text colour. Nothing else in the app is
+     allowed to be saturated. (§3: every saturated colour on screen should
+     mean something about money.)                                             */
+  --band-current-fill:  var(--surface-sunken);
+  --band-current-text:  var(--slate-600);
+  --band-current-on:    var(--ink-900);
+
+  --band-due-fill:      var(--pine-700);
+  --band-due-text:      var(--pine-700);
+  --band-due-on:        var(--paper);
+
+  --band-late-1-fill:   var(--amber-500);   /*  1–14 days */
+  --band-late-1-text:   var(--amber-800);
+  --band-late-1-on:     var(--ink-900);     /*  7.63:1    */
+
+  --band-late-2-fill:   var(--rust-600);    /* 15–34 days */
+  --band-late-2-text:   var(--rust-600);
+  --band-late-2-on:     var(--paper);       /*  6.13:1    */
+
+  --band-late-3-fill:   var(--oxblood-800); /* 35+ days   */
+  --band-late-3-text:   var(--oxblood-800);
+  --band-late-3-on:     var(--paper);       /* 11.06:1    */
+
+  --band-paid-fill:     var(--mint-300);
+  --band-paid-text:     var(--mint-800);
+  --band-paid-on:       var(--ink-900);     /*  9.86:1    */
+
+  /* --- Semantic: text ------------------------------------------------------ */
+  --text-primary:   var(--ink-900);    /* 15.44:1 */
+  --text-secondary: var(--slate-600);  /*  5.81:1 */
+  --text-inverse:   var(--paper);
+  --text-link:      var(--pine-700);   /*  7.06:1 */
+
+  /* --- Semantic: interactive ----------------------------------------------- */
+  --action-fill:        var(--pine-700);
+  --action-text:        var(--paper);   /* 7.06:1 */
+  --action-fill-hover:  #094A42;
+  --action-fill-active: #073B34;
+  --action-quiet-text:  var(--pine-700);
+  --danger-text:        var(--rust-600);
+  --disabled-text:      #8A9A9E;        /* 3.1:1 — deliberately below AA, so a
+                                           disabled control cannot read as
+                                           available. Never the only signal.  */
+
+  /* --- Focus ---------------------------------------------------------------
+     Two-tone ring: inner halo in the surface colour, outer ring in ink.
+     Legible on paper, on pine buttons, and on every aging fill. A single-
+     colour ring is invisible against at least one of them.                   */
+  --focus-halo: var(--paper);
+  --focus-ring: var(--ink-900);
+  --focus-shadow: 0 0 0 2px var(--focus-halo), 0 0 0 4px var(--focus-ring);
+
+  /* --- Type ----------------------------------------------------------------
+     Three roles, per §3. Self-hosted via next/font, no CDN.
+     display — page titles and the four dashboard numbers, sparingly
+     body    — everything that is a sentence
+     data    — every currency amount, invoice number, and date, always        */
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body:    "Inter Tight Variable", "Inter Tight", system-ui, sans-serif;
+  --font-data:    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Display sizes clamp; body sizes do not, because body text that resizes
+     with the viewport wrecks measure.                                        */
+  --size-kpi:   clamp(2.5rem, 1.6rem + 3.4vw, 4rem);
+  --size-h1:    clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --size-h2:    1.375rem;
+  --size-h3:    1.0625rem;
+  --size-body:  0.9375rem;
+  --size-small: 0.8125rem;
+  --size-micro: 0.6875rem;   /* band labels, rail axis — uppercase, tracked   */
+
+  --leading-tight: 1.1;
+  --leading-snug:  1.3;
+  --leading-body:  1.55;
+
+  --tracking-kpi:   -0.02em;
+  --tracking-title: -0.015em;
+  --tracking-micro:  0.08em;
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semi:    600;
+  --weight-bold:    700;
+
+  /* Every figure in the product is tabular; columns of money must align
+     optically. Applied to .num and to all three faces. (§3)                  */
+  --numeric-tabular: tabular-nums lining-nums;
+
+  /* --- Space — 4px base ---------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* --- Radii ---------------------------------------------------------------
+     Small and consistent. Paper has cut edges, not rounded ones.             */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-chip: 2px;   /* rail chips are tally marks, not pills              */
+
+  /* --- Elevation -----------------------------------------------------------
+     Sheets of paper on a desk: a tight contact shadow. No coloured glow, no
+     blur-heavy drop, never a gradient. (§3 bans gradient-on-glass.)          */
+  --shadow-sheet: 0 1px 0 var(--hairline), 0 1px 2px rgb(13 26 32 / 0.06);
+  --shadow-lift:  0 2px 4px rgb(13 26 32 / 0.08), 0 8px 16px rgb(13 26 32 / 0.06);
+
+  /* --- Motion --------------------------------------------------------------
+     Only transform and opacity animate. Nothing that triggers layout — the
+     Aging Rail carries a zero-CLS requirement (AC#8).                        */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-drop: cubic-bezier(0.55, 0, 1, 0.45);   /* gravity, for paid chips   */
+
+  --dur-instant: 80ms;
+  --dur-fast:    160ms;
+  --dur-base:    240ms;
+  --dur-rail:    400ms;   /* chip entry, per §3                               */
+  --dur-paid:    700ms;   /* chip detaches and falls                          */
+  --stagger-chip: 18ms;
+
+  /* --- Layout -------------------------------------------------------------- */
+  --measure: 68ch;
+  --page-max: 1240px;
+  --rail-height: 148px;   /* reserved before data loads; see AC#8             */
+}
+
+/* Reduced motion: chips arrive in place, paid chips fade. The payoff moment
+   still resolves — it just does not travel. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-rail: 1ms;
+    --dur-paid: 150ms;
+    --stagger-chip: 0ms;
+    --ease-drop: linear;
+  }
+}
+
+/* Forced colours: the aging scale is the only carrier of "how late is this",
+   so it must survive high-contrast mode. Chips fall back to border weight
+   plus their text label — colour is never the sole signal anywhere. */
+@media (forced-colors: active) {
+  :root {
+    --hairline: CanvasText;
+    --rule-strong: CanvasText;
+  }
+}
