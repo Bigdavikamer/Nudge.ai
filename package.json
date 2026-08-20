@@ -1,0 +1,45 @@
+{
+  "name": "nudge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/reset.ts",
+    "check": "npm run typecheck && npm run lint && npm run check:tokens && npm run test",
+    "check:tokens": "node scripts/check-tokens.mjs"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.12.0",
+    "@electric-sql/pglite": "^0.3.0",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.44.0",
+    "next": "^15.5.0",
+    "pg": "^8.13.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.31.0",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.5.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

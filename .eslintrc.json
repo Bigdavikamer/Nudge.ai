@@ -1,0 +1,19 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "NewExpression[callee.name='Date'][arguments.length=0]",
+        "message": "Read the time through the Clock adapter (lib/adapters/clock.ts). A bare new Date() makes the scheduler untestable — see D-006."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["lib/adapters/clock.ts", "scripts/**", "tests/**"],
+      "rules": { "no-restricted-syntax": "off" }
+    }
+  ],
+  "ignorePatterns": ["node_modules/", ".next/", ".pglite/", "drizzle/"]
+}

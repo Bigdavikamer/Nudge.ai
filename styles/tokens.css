@@ -90,10 +90,11 @@
      Three roles, per §3. Self-hosted via next/font, no CDN.
      display — page titles and the four dashboard numbers, sparingly
      body    — everything that is a sentence
-     data    — every currency amount, invoice number, and date, always        */
-  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;
-  --font-body:    "Inter Tight Variable", "Inter Tight", system-ui, sans-serif;
-  --font-data:    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+     data    — every currency amount, invoice number, and date, always
+     The font families themselves are injected by next/font in app/layout.tsx. */
+  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body:    var(--font-inter-tight), "Inter Tight", system-ui, sans-serif;
+  --font-data:    var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
 
   /* Display sizes clamp; body sizes do not, because body text that resizes
      with the viewport wrecks measure.                                        */
@@ -161,7 +162,7 @@
   /* --- Layout -------------------------------------------------------------- */
   --measure: 68ch;
   --page-max: 1240px;
-  --rail-height: 148px;   /* reserved before data loads; see AC#8             */
+  --rail-height: 148px;   /* floor, so an empty rail keeps its shape          */
 }
 
 /* Reduced motion: chips arrive in place, paid chips fade. The payoff moment

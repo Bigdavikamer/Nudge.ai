@@ -1,0 +1,267 @@
+/*
+  The Aging Rail.
+
+  Entirely server-rendered: positions come from lib/rail.ts, the entry
+  animation is CSS with a staggered delay, and the hover card is :hover /
+  :focus-within. No client JavaScript and no measurement pass, so the rail
+  arrives at its final size in the first paint and there is no post-hydration
+  reflow to shift anything (AC#8). Only transform and opacity animate; the
+  min-height is a floor that stops an empty rail from collapsing.
+*/
+
+.rail {
+  min-height: var(--rail-height);
+  border-bottom: 1px solid var(--rule-strong);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1.2fr;
+  gap: var(--space-3);
+}
+
+.column {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-2);
+  border-left: 1px solid var(--hairline);
+  padding-left: var(--space-3);
+  min-width: 0;
+}
+.column:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.colHead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.colLabel {
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.colCount {
+  font-family: var(--font-data);
+  font-size: var(--size-micro);
+  color: var(--text-primary);
+  font-variant-numeric: var(--numeric-tabular);
+}
+
+/* The plot area. Chips are absolutely positioned, so nothing here reflows. */
+.plot {
+  position: relative;
+  height: 92px;
+  border-bottom: 2px solid var(--rule-strong);
+}
+
+.chip {
+  position: absolute;
+  bottom: 0;
+  width: 9px;
+  margin-left: -4.5px;
+  border-radius: var(--radius-chip) var(--radius-chip) 0 0;
+  background: var(--chip-fill);
+  height: var(--chip-height);
+  display: block;
+  text-decoration: none;
+  transform-origin: bottom center;
+
+  animation: chip-in var(--dur-rail) var(--ease-out) backwards;
+  animation-delay: var(--chip-delay, 0ms);
+}
+
+.chip::after {
+  /* A larger invisible hit area: the mark stays a hairline, the target does
+     not. 9px of chip is a fine tally mark and a terrible tap target. */
+  content: '';
+  position: absolute;
+  inset: -6px -8px -6px -8px;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  outline: none;
+}
+
+.chip:hover::before,
+.chip:focus-visible::before {
+  content: '';
+  position: absolute;
+  inset: -3px -3px 0 -3px;
+  border: 2px solid var(--ink-900);
+  border-bottom: none;
+  border-radius: var(--radius-chip) var(--radius-chip) 0 0;
+}
+
+@keyframes chip-in {
+  from {
+    transform: scaleY(0.02);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Overflow cluster — pinned to the column edge, never silently dropped. */
+.cluster {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 2px var(--space-2);
+  border: 1px dashed var(--slate-600);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-family: var(--font-data);
+  font-size: var(--size-micro);
+  text-decoration: none;
+}
+.cluster:hover {
+  color: var(--text-primary);
+  border-color: var(--ink-900);
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-data);
+  font-size: var(--size-micro);
+  color: var(--text-secondary);
+}
+
+/* --- Hover / focus card ---------------------------------------------------
+   Expands the invoice inline, per §3. Positioned above the chip and anchored
+   away from the viewport edge using an anchor hint computed on the server. */
+
+.card {
+  position: absolute;
+  bottom: calc(var(--chip-height) + 10px);
+  z-index: 30;
+  width: max-content;
+  max-width: 260px;
+  padding: var(--space-3);
+  background: var(--surface-raised);
+  border: 1px solid var(--ink-900);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lift);
+  color: var(--text-primary);
+  display: none;
+  text-align: left;
+}
+
+.chip:hover .card,
+.chip:focus-visible .card {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.card[data-anchor='center'] {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.card[data-anchor='left'] {
+  left: -8px;
+}
+.card[data-anchor='right'] {
+  right: -8px;
+}
+
+.cardTitle {
+  font-weight: var(--weight-semi);
+  font-size: var(--size-small);
+}
+
+.cardAmount {
+  font-family: var(--font-data);
+  font-size: var(--size-h3);
+  font-variant-numeric: var(--numeric-tabular);
+}
+
+.cardMeta {
+  font-size: var(--size-micro);
+  color: var(--text-secondary);
+}
+
+.cardBand {
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  font-weight: var(--weight-medium);
+  color: var(--chip-text);
+}
+
+.cardNote {
+  font-size: var(--size-micro);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+/* --- Empty ---------------------------------------------------------------- */
+
+.empty {
+  height: 92px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--size-small);
+  border-bottom: 2px solid var(--rule-strong);
+}
+
+/* --- Responsive -----------------------------------------------------------
+   The rail keeps all four bands on a phone; they are the point. Columns get
+   narrower, so more chips land in the overflow cluster, which is the designed
+   degradation rather than an accident. */
+
+@media (max-width: 720px) {
+  .grid {
+    gap: var(--space-2);
+  }
+  .column {
+    padding-left: var(--space-2);
+  }
+  .plot {
+    height: 72px;
+  }
+  .card {
+    max-width: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .chip {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+}

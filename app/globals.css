@@ -1,0 +1,651 @@
+@import '../styles/tokens.css';
+
+/* ---------------------------------------------------------------------------
+   Reset
+   --------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+  font-variant-numeric: var(--numeric-tabular);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+  border-radius: var(--radius-sm);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title);
+}
+
+h1 {
+  font-size: var(--size-h1);
+}
+h2 {
+  font-size: var(--size-h2);
+}
+h3 {
+  font-size: var(--size-h3);
+}
+
+/* Every figure in the product is tabular and monospaced (§3). */
+.num {
+  font-family: var(--font-data);
+  font-variant-numeric: var(--numeric-tabular);
+  letter-spacing: -0.01em;
+}
+
+.micro {
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+
+.small {
+  font-size: var(--size-small);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Shell
+   --------------------------------------------------------------------------- */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.topbar {
+  border-bottom: 1px solid var(--rule-strong);
+  background: var(--surface-raised);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar-inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: 1.0625rem;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* A tally mark, not a logo. Four strokes and the fifth struck through is what
+   a stack of unpaid invoices looks like on paper. */
+.wordmark-mark {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-left: 2px solid var(--pine-700);
+  border-right: 2px solid var(--pine-700);
+  position: relative;
+}
+.wordmark-mark::after {
+  content: '';
+  position: absolute;
+  inset: 5px -3px auto -3px;
+  height: 2px;
+  background: var(--amber-500);
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-1);
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav a {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--size-small);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+.nav a:hover {
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+}
+.nav a[aria-current='page'] {
+  color: var(--text-primary);
+  background: var(--surface-sunken);
+}
+
+.page {
+  max-width: var(--page-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  flex: 1;
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.dev-banner {
+  background: var(--amber-500);
+  color: var(--ink-900);
+  font-size: var(--size-small);
+  text-align: center;
+  padding: var(--space-2) var(--space-4);
+}
+.dev-banner code {
+  font-family: var(--font-data);
+  font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons
+   --------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--action-fill);
+  color: var(--action-text);
+  font-size: var(--size-small);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.btn:hover {
+  background: var(--action-fill-hover);
+}
+.btn:active {
+  background: var(--action-fill-active);
+}
+.btn[disabled],
+.btn[aria-disabled='true'] {
+  background: var(--surface-sunken);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.btn-quiet {
+  background: transparent;
+  color: var(--action-quiet-text);
+  border-color: var(--rule-strong);
+}
+.btn-quiet:hover {
+  background: var(--surface-sunken);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger-text);
+  border-color: var(--rule-strong);
+}
+.btn-danger:hover {
+  background: var(--surface-sunken);
+}
+
+.btn-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Forms
+   --------------------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field label {
+  font-size: var(--size-small);
+  font-weight: var(--weight-medium);
+}
+
+.field .hint {
+  font-size: var(--size-micro);
+  color: var(--text-secondary);
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: var(--space-2) var(--space-3);
+  min-height: 38px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  border-color: var(--pine-700);
+}
+
+.field input.num,
+.field input[inputmode='decimal'] {
+  font-family: var(--font-data);
+}
+
+.field-error {
+  color: var(--danger-text);
+  font-size: var(--size-small);
+}
+
+.field input[aria-invalid='true'] {
+  border-color: var(--rust-600);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  max-width: 620px;
+}
+.form-grid .span-2 {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-error {
+  border: 1px solid var(--rust-600);
+  border-left-width: 3px;
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  color: var(--rust-600);
+  background: var(--surface-raised);
+  font-size: var(--size-small);
+}
+
+/* ---------------------------------------------------------------------------
+   Sheets, tables, empty states
+   --------------------------------------------------------------------------- */
+
+/* Grid and flex children default to min-width:auto, which lets a wide table
+   stretch its container past the viewport instead of scrolling inside it.
+   Every layout container in the app opts out. */
+.split > *,
+.stack > *,
+.detail-grid > *,
+.kpis > *,
+.form-grid > *,
+.topbar-inner > * {
+  min-width: 0;
+}
+
+.sheet {
+  min-width: 0;
+  background: var(--surface-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sheet);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.table {
+  width: 100%;
+  min-width: 460px;
+  border-collapse: collapse;
+  font-size: var(--size-small);
+}
+
+.table th {
+  text-align: left;
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--rule-strong);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: baseline;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: var(--paper);
+}
+
+.table .right {
+  text-align: right;
+}
+
+.table a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+}
+.table a:hover {
+  text-decoration: underline;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.empty {
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+  color: var(--text-secondary);
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+}
+.empty strong {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: var(--size-h3);
+  font-weight: var(--weight-semi);
+}
+
+/* ---------------------------------------------------------------------------
+   Aging pill — the same scale as the rail, in text contexts
+   --------------------------------------------------------------------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.pill::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-chip);
+  background: var(--pill-fill, var(--band-current-fill));
+  flex: none;
+}
+
+/* ---------------------------------------------------------------------------
+   KPI row — four figures on bare paper, separated by rules. Not cards.
+   PHASE-0 §7.6 flags this as the riskiest call in the design.
+   --------------------------------------------------------------------------- */
+
+.kpis {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--rule-strong);
+  margin-bottom: var(--space-5);
+}
+
+.kpi {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  border-left: 1px solid var(--hairline);
+  padding-left: var(--space-4);
+}
+.kpi:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.kpi-label {
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-variant-numeric: var(--numeric-tabular);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-kpi);
+  line-height: 1;
+  font-size: 1.75rem;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.kpi-lead .kpi-value {
+  font-size: var(--size-kpi);
+  color: var(--mint-800);
+}
+
+.kpi-foot {
+  font-size: var(--size-small);
+  color: var(--text-secondary);
+}
+
+.kpi-value-stack {
+  display: grid;
+  gap: var(--space-1);
+}
+
+@media (max-width: 900px) {
+  .kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  .kpi:nth-child(3) {
+    border-left: none;
+    padding-left: 0;
+  }
+  .kpi-lead {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+  .kpi {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-3);
+  }
+  .kpi-lead {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Two-column dashboard footer
+   --------------------------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 860px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.timeline {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-3);
+  font-size: var(--size-small);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+.timeline-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.timeline-row time {
+  font-family: var(--font-data);
+  font-size: var(--size-micro);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--space-5);
+}
+@media (max-width: 860px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.definition {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  font-size: var(--size-small);
+}
+.definition div {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: var(--space-3);
+}
+.definition dt {
+  color: var(--text-secondary);
+  font-size: var(--size-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-micro);
+  padding-top: 2px;
+}
+.definition dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
